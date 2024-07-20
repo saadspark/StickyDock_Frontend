@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: 'export',
-  distDir: 'out', 
+  distDir: 'public_html', 
 };
 
 export default nextConfig;
