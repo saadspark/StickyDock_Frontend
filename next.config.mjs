@@ -1,4 +1,8 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {};
-
-export default nextConfig;
+const nextConfig = {
+    output: 'export',  // Ensure that Next.js exports static HTML
+    distDir: 'out',  // Output directory
+  };
+  
+  export default nextConfig;
+  
