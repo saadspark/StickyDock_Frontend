@@ -40,12 +40,22 @@ jobs:
         with:
           node-version: "20"
           cache: ${{ steps.detect-package-manager.outputs.manager }}
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+        with:
+          static_site_generator: next
+      - name: Restore cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            .next/cache
+          key: ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json', '**/yarn.lock') }}-${{ hashFiles('**.[jt]s', '**.[jt]sx') }}
+          restore-keys: |
+            ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json', '**/yarn.lock') }}-
       - name: Install dependencies
         run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
       - name: Build with Next.js
         run: ${{ steps.detect-package-manager.outputs.runner }} next build
-      - name: Export static files
-        run: ${{ steps.detect-package-manager.outputs.runner }} next export
       - name: List `out` directory
         run: ls -al ./out
       - name: Upload artifact
@@ -68,6 +78,8 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
       - name: Install lftp
         run: sudo apt-get install lftp
       - name: Deploy to Hostinger
@@ -75,7 +87,6 @@ jobs:
           lftp -f "
           open ${{ secrets.HOSTINGER_FTP_SERVER }}
           user ${{ secrets.HOSTINGER_FTP_USERNAME }} ${{ secrets.HOSTINGER_FTP_PASSWORD }}
-          set ftp:ssl-allow no
-          mirror -R ./out public_html -v      
+          mirror -R ./out public_html -v
           bye
           "
