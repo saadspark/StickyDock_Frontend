@@ -34,7 +34,6 @@ jobs:
           else
             echo "Unable to determine package manager"
             exit 1
-          fi
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
@@ -56,6 +55,8 @@ jobs:
         run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
       - name: Build with Next.js
         run: ${{ steps.detect-package-manager.outputs.runner }} next build
+      - name: Export static files
+        run: ${{ steps.detect-package-manager.outputs.runner }} next export
       - name: List `out` directory
         run: ls -al ./out
       - name: Upload artifact
