@@ -76,6 +76,6 @@ jobs:
           open ${{ secrets.HOSTINGER_FTP_SERVER }}
           user ${{ secrets.HOSTINGER_FTP_USERNAME }} ${{ secrets.HOSTINGER_FTP_PASSWORD }}
           set ftp:ssl-allow no
-          mirror -R ./out public_html -v
+          mirror -R ./out public_html -v      
           bye
           "
