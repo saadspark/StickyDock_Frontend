@@ -56,6 +56,8 @@ jobs:
         run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
       - name: Build with Next.js
         run: ${{ steps.detect-package-manager.outputs.runner }} next build
+      - name: List `out` directory
+        run: ls -al ./out
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
@@ -83,8 +85,8 @@ jobs:
       - name: Deploy to Hostinger
         run: |
           lftp -f "
-            open ${{ secrets.HOSTINGER_FTP_SERVER }}
-            user ${{ secrets.HOSTINGER_FTP_USERNAME }} ${{ secrets.HOSTINGER_FTP_PASSWORD }}
-            mirror -R ./out public_html
-            bye
+          open ${{ secrets.HOSTINGER_FTP_SERVER }}
+          user ${{ secrets.HOSTINGER_FTP_USERNAME }} ${{ secrets.HOSTINGER_FTP_PASSWORD }}
+          mirror -R ./out public_html
+          bye
           "
