@@ -90,3 +90,4 @@ jobs:
           mirror -R ./out /path/to/your/hostinger/directory
           bye
           "
+   
