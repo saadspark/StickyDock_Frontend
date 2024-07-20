@@ -85,6 +85,6 @@ jobs:
           lftp -f "
             open ${{ secrets.HOSTINGER_FTP_SERVER }}
             user ${{ secrets.HOSTINGER_FTP_USERNAME }} ${{ secrets.HOSTINGER_FTP_PASSWORD }}
-            mirror -R ./out /home/u784206482/domains/stickydock.com/public_html
+            mirror -R ./out public_html
             bye
           "
