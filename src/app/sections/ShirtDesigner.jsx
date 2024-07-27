@@ -12,7 +12,7 @@ const ShirtDesigner = () => {
   const [textColor, setTextColor] = useState('#000000');
   const [shirtImage] = useImage('/shirt.png'); // Ensure the path is correct
   const [uploadedImage] = useImage(designUrl);
-  const [deleteIcon] = useImage('/path-to-your-delete-icon.png'); // Ensure the path is correct
+  const [deleteIcon] = useImage('/shirt.png'); // Ensure the path is correct
   const imageRef = useRef();
   const transformerRef = useRef();
   const stageRef = useRef();
