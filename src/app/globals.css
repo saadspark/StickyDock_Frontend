@@ -2,3 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
+#stage{
+    background-color: #86fddf;
+}

@@ -1,18 +1,26 @@
-'use client'
-import React, { useState, useRef, useEffect } from 'react';
-import { Stage, Layer, Image as KonvaImage, Transformer, Text, Group } from 'react-konva';
-import useImage from 'use-image';
-import { FaTrashAlt } from 'react-icons/fa';
+"use client";
+import React, { useState, useRef, useEffect } from "react";
+import {
+  Stage,
+  Layer,
+  Image as KonvaImage,
+  Transformer,
+  Text,
+  Group,
+} from "react-konva";
+import useImage from "use-image";
+import { MdDelete } from "react-icons/md";
+import { FaDownload } from "react-icons/fa6";
 
 const ShirtDesigner = () => {
   const [designUrl, setDesignUrl] = useState(null);
   const [design, setDesign] = useState(null);
-  const [text, setText] = useState('');
+  const [text, setText] = useState("");
   const [texts, setTexts] = useState([]);
-  const [textColor, setTextColor] = useState('#000000');
-  const [shirtImage] = useImage('/shirt.png'); // Ensure the path is correct
+  const [textColor, setTextColor] = useState("#ffff");
+  const [shirtImage] = useImage("/shirt.png"); // Ensure the path is correct
   const [uploadedImage] = useImage(designUrl);
-  const [deleteIcon] = useImage('/shirt.png'); // Ensure the path is correct
+  const [deleteIcon] = useImage(<MdDelete />); // Ensure the path is correct
   const imageRef = useRef();
   const transformerRef = useRef();
   const stageRef = useRef();
@@ -101,8 +109,11 @@ const ShirtDesigner = () => {
   };
 
   const handleAddText = () => {
-    setTexts([...texts, { text, x: 150, y: 150, fontSize: 24, color: textColor }]);
-    setText('');
+    setTexts([
+      ...texts,
+      { text, x: 150, y: 150, fontSize: 24, color: textColor },
+    ]);
+    setText("");
   };
 
   const handleDeleteText = (index) => {
@@ -120,14 +131,13 @@ const ShirtDesigner = () => {
     }
 
     const uri = stageRef.current.toDataURL();
-    const link = document.createElement('a');
-    link.download = 'design.png';
+    const link = document.createElement("a");
+    link.download = "design.png";
     link.href = uri;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
 
-    // Show the transformer again after saving
     if (transformerRef.current && selectedTextIndex !== null) {
       transformerRef.current.nodes([selectedTextRef.current]); // Reset selected node
       transformerRef.current.getLayer().batchDraw();
@@ -135,96 +145,115 @@ const ShirtDesigner = () => {
   };
 
   return (
-    <div>
-      <input type="file" onChange={handleUpload} />
-      <input
-        type="text"
-        value={text}
-        onChange={(e) => setText(e.target.value)}
-        placeholder="Add text"
-      />
-      <input
-        type="color"
-        value={textColor}
-        onChange={(e) => setTextColor(e.target.value)}
-      />
-      <button onClick={handleAddText}>Add Text</button>
-      <Stage width={500} height={600} ref={stageRef}>
-        <Layer>
-          {shirtImage && (
-            <KonvaImage
-              image={shirtImage}
-              width={500}
-              height={600}
-            />
-          )}
-          {design && uploadedImage && (
-            <>
-              <KonvaImage
-                image={uploadedImage}
-                x={design.x}
-                y={design.y}
-                width={design.width}
-                height={design.height}
-                draggable
-                ref={imageRef}
-                onDragEnd={handleDragEnd}
-                onTransformEnd={handleTransformEnd}
-              />
-              <Transformer
-                ref={transformerRef}
-                boundBoxFunc={(oldBox, newBox) => {
-                  // limit resize
-                  if (newBox.width < 5 || newBox.height < 5) {
-                    return oldBox;
-                  }
-                  return newBox;
-                }}
-              />
-            </>
-          )}
-          {texts.map((textItem, index) => (
-            <Group key={index}>
-              <Text
-                ref={index === selectedTextIndex ? selectedTextRef : null}
-                text={textItem.text}
-                x={textItem.x}
-                y={textItem.y}
-                fontSize={textItem.fontSize}
-                fill={textItem.color}
-                draggable
-                onClick={() => setSelectedTextIndex(index)}
-                onTap={() => setSelectedTextIndex(index)}
-                onDragEnd={(e) => handleTextDragEnd(e, index)}
-                onTransformEnd={() => handleTextTransformEnd(index)}
-              />
-              {index === selectedTextIndex && (
+    <div className="flex max-md:flex-wrap  w-full  bg-[#fff97e]">
+      <div className="flex-col w-full p-10 mt-16">
+        <h1 className=" text-[70px] font-bold text-black">Create Your On</h1>
+        <h1 className="text-[70px] font-bold text-red-600">Design</h1>
+        <input type="file" onChange={handleUpload} className="p-3 bg-black text-white mt-5 rounded-lg shadow-lg w-96"/>
+        <br></br>
+        <input
+        className="p-3 mt-5 rounded-lg shadow-md w-96"
+          type="text"
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          placeholder="Add text"
+        />
+        <br />
+       
+        <input
+        
+          placeholder=""
+          className="ml-3 rounded-lg h-12 mt-5"
+          type="color"
+          value={textColor}
+          
+          onChange={(e) => setTextColor(e.target.value)}
+        />
+        <button onClick={handleAddText} className="p-2 rounded-lg mb-2 flex justify-center items-center bg-black font-bold text-white ">Add Text</button>
+      </div>
+
+      <div className=" flex-col flex justify-center items-center bg-[#86fddf] w-full ">
+        <Stage width={500} height={600} ref={stageRef} id={"stage"}>
+          <Layer>
+            {shirtImage && (
+              <KonvaImage image={shirtImage} width={500} height={600} />
+            )}
+            {design && uploadedImage && (
+              <>
+                <KonvaImage
+                  image={uploadedImage}
+                  x={design.x}
+                  y={design.y}
+                  width={design.width}
+                  height={design.height}
+                  draggable
+                  ref={imageRef}
+                  onDragEnd={handleDragEnd}
+                  onTransformEnd={handleTransformEnd}
+                />
                 <Transformer
                   ref={transformerRef}
                   boundBoxFunc={(oldBox, newBox) => {
+                    // limit resize
                     if (newBox.width < 5 || newBox.height < 5) {
                       return oldBox;
                     }
                     return newBox;
                   }}
                 />
-              )}
-              {index === selectedTextIndex && deleteIcon && (
-                <KonvaImage
-                  x={textItem.x + textItem.width / 2 - 10}
-                  y={textItem.y + textItem.height / 2 - 10}
-                  image={deleteIcon}
-                  width={20}
-                  height={20}
-                  onClick={() => handleDeleteText(index)}
-                  onTap={() => handleDeleteText(index)}
+              </>
+            )}
+            {texts.map((textItem, index) => (
+              <Group key={index}>
+                <Text
+                  ref={index === selectedTextIndex ? selectedTextRef : null}
+                  text={textItem.text}
+                  x={textItem.x}
+                  y={textItem.y}
+                  fontSize={textItem.fontSize}
+                  fill={textItem.color}
+                  draggable
+                  onClick={() => setSelectedTextIndex(index)}
+                  onTap={() => setSelectedTextIndex(index)}
+                  onDragEnd={(e) => handleTextDragEnd(e, index)}
+                  onTransformEnd={() => handleTextTransformEnd(index)}
                 />
-              )}
-            </Group>
-          ))}
-        </Layer>
-      </Stage>
-      <button onClick={handleSave}>Save Design</button>
+                {index === selectedTextIndex && (
+                  <Transformer
+                    ref={transformerRef}
+                    boundBoxFunc={(oldBox, newBox) => {
+                      if (newBox.width < 5 || newBox.height < 5) {
+                        return oldBox;
+                      }
+                      return newBox;
+                    }}
+                  />
+                )}
+                {index === selectedTextIndex && deleteIcon && (
+                  <KonvaImage
+                    x={textItem.x + textItem.width / 2 - 10}
+                    y={textItem.y + textItem.height / 2 - 10}
+                    image={deleteIcon}
+                    width={40}
+                    height={40}
+                    onClick={() => handleDeleteText(index)}
+                    onTap={() => handleDeleteText(index)}
+                  />
+                )}
+              </Group>
+            ))}
+          </Layer>
+        </Stage>
+        <button
+          className="p-4 rounded-lg mb-2 flex justify-center items-center bg-green-500 font-bold text-white "
+          onClick={handleSave}
+        >
+          Download{" "}
+          <span className="inline-block ml-2">
+            <FaDownload />
+          </span>
+        </button>
+      </div>
     </div>
   );
 };

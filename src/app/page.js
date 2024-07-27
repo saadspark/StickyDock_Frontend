@@ -11,7 +11,7 @@ export default function Home() {
   return (
     <main className="relative">
       <Header />
-      <Hero />
+      {/* <Hero /> */}
       <ShirtDesigner />
     </main>
   );
