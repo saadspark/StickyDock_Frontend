@@ -14,11 +14,14 @@ export default function Header() {
 
   useEffect(() => {
     if (menu) {
-      gsap.to(menuRef.current, { duration: 0.5, x: '0%', display: "flex" });
+      gsap.to(menuRef.current, { duration: 0.5, x: 0, opacity: 1, display: "flex" });
     } else {
-      gsap.to(menuRef.current, { duration: 0.5, x: '100%', display: "none" });
+      gsap.to(menuRef.current, { duration: 0.5, x: '100%', opacity: 0, onComplete: () => {
+        gsap.set(menuRef.current, { display: "none" });
+      }});
     }
   }, [menu]);
+
 
   return (
     <section>
